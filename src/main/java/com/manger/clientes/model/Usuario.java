@@ -1,9 +1,9 @@
 package com.manger.clientes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -15,6 +15,10 @@ public class Usuario {
   private String nome;
   private String senha;
 
+  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+  private List<Cliente> clientes = new ArrayList<>();
+
+  //---------- Getters e Setters ------------//
   public Long getId() {
     return id;
   }
@@ -34,4 +38,6 @@ public class Usuario {
   public void setSenha(String senha) {
     this.senha = senha;
   }
+
+
 }

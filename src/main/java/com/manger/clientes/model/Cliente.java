@@ -1,9 +1,7 @@
 package com.manger.clientes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.manger.clientes.DTO.Endereco;
+import jakarta.persistence.*;
 
 @Entity
 public class Cliente {
@@ -12,12 +10,33 @@ public class Cliente {
   private Long id;
 
   private String nome;
- // private DadosEndereco endereco;
   private String telefone;
   private String email;
 
+  @ManyToOne
+  private Usuario usuario;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "endereco_id")
+  private Endereco endereco;
+
+  //---------- Construtores ------------//
+  public Cliente() {}
+
+  public Cliente(String nome, String telefone, String email, Endereco endereco) {
+    this.nome = nome;
+    this.telefone = telefone;
+    this.email = email;
+    this.endereco = endereco;
+  }
+
+  //---------- Getters e Setters ------------//
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getNome() {
@@ -27,14 +46,6 @@ public class Cliente {
   public void setNome(String nome) {
     this.nome = nome;
   }
-
-//  public DadosEndereco getEndereco() {
-//    return endereco;
-//  }
-//
-//  public void setEndereco(DadosEndereco endereco) {
-//    this.endereco = endereco;
-//  }
 
   public String getTelefone() {
     return telefone;
@@ -50,5 +61,26 @@ public class Cliente {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Endereco getEndereco() {
+    return endereco;
+  }
+
+  public void setEndereco(Endereco endereco) {
+    this.endereco = endereco;
+  }
+
+  @Override
+  public String toString() {
+    return "\nCliente{" +
+        "id: '" + id + '\'' +
+        "nome: '" + nome + '\'' +
+        ", CEP:'" + endereco.getCep() + '\'' +
+        ", Endereço:'" + endereco + '\'' +
+        ", telefone:'" + telefone + '\'' +
+        ", email: '" + email + '\'' +
+        ", usuário: " + usuario +
+        '}';
   }
 }
