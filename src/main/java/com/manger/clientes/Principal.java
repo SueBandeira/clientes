@@ -71,9 +71,9 @@ public class Principal {
         case 3:
           cadastraCliente();
           break;
-        case 4:
-          listasClientesRegistrados();
-          break;
+//        case 4:
+//          listasClientesRegistrados();
+//          break;
         case 5:
           listasClientePorId();
           break;
@@ -93,11 +93,15 @@ public class Principal {
   }
 
   private void atualizarCliente() {
-    System.out.println("Digite o ID do cliente: ");
-    var id = leitura.nextLong();
+    System.out.println("Digite o ID do Usuário: ");
+    var idUsuario = leitura.nextLong();
     leitura.nextLine();
 
-    Cliente clienteBanco = clienteService.retornaClientePorId(id);
+    System.out.println("Digite o ID do cliente: ");
+    var idCliente = leitura.nextLong();
+    leitura.nextLine();
+
+    Cliente clienteBanco = clienteService.retornaClientePorId(idUsuario, idCliente);
     System.out.println(clienteBanco);
 
     if (clienteBanco == null) {
@@ -147,7 +151,7 @@ public class Principal {
     Endereco endereco = clienteBanco.getEndereco();
     if (flag) {
       DTOCriaCliente cliente = new DTOCriaCliente(nome, telefone, email, cep);
-      clienteBanco =  clienteService.atualizaCliente(id, cliente);
+      clienteBanco =  clienteService.atualizaCliente(idCliente, cliente);
       endereco = clienteBanco.getEndereco();
     }
     clienteBanco.setEndereco(endereco);
@@ -155,11 +159,15 @@ public class Principal {
   }
 
   private void listasClientePorId() {
-    System.out.println("Digite o ID do cliente: ");
-    var nome = leitura.nextLong();
+    System.out.println("Digite o ID do Usuário: ");
+    var idUsuario = leitura.nextLong();
     leitura.nextLine();
 
-    Cliente clienteRetornado = clienteService.retornaClientePorId(nome);
+    System.out.println("Digite o ID do cliente: ");
+    var idCliente = leitura.nextLong();
+    leitura.nextLine();
+
+    Cliente clienteRetornado = clienteService.retornaClientePorId(idUsuario, idCliente);
     if (clienteRetornado == null) {
       System.out.println("Cliente não encontrado.");
     } else {
@@ -176,9 +184,9 @@ public class Principal {
     clienteService.deletaCliente(nome);
   }
 
-  private void listasClientesRegistrados() {
-    System.out.println(clienteService.listarCliente());
-  }
+//  private void listasClientesRegistrados() {
+//    System.out.println(clienteService.listarClientes());
+//  }
 
   public DadosEndereco getDadosEndereco(String cep) {
     String ENDERECO = "https://viacep.com.br/ws/";

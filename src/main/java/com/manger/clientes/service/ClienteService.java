@@ -5,8 +5,10 @@ import com.manger.clientes.DTO.DTOCriaCliente;
 import com.manger.clientes.DTO.DadosEndereco;
 import com.manger.clientes.DTO.Endereco;
 import com.manger.clientes.model.Cliente;
+import com.manger.clientes.model.Usuario;
 import com.manger.clientes.repository.ClienteRepository;
 import com.manger.clientes.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class ClienteService {
 
   private final ClienteRepository clienteRepository;
 
+  @Autowired
   private UsuarioRepository usuarioRepository;
 
   //pode substituir o autowired
@@ -24,8 +27,8 @@ public class ClienteService {
     this.clienteRepository = clienteRepository;
   }
 
-  public Cliente retornaClientePorId (Long id) {
-    Optional<Cliente> cliente = clienteRepository.findById(id);
+  public Cliente retornaClientePorId (Long idUsuario, Long idCliente) {
+    Optional<Cliente> cliente = clienteRepository.findByIdAndUsuarioId(idCliente, idUsuario);
 
     if (cliente.isEmpty()) {
       return null;
@@ -48,16 +51,20 @@ public class ClienteService {
     return endereco;
   }
 
-  public Cliente criaCliente (DTOCriaCliente cliente) {
-    String cep = cliente.cep();
-    var endereco = obtemEndereco(cep);
-    Cliente clientes = new Cliente(cliente.nome(), cliente.telefone(), cliente.email(), endereco);
-    System.out.println(clientes);
+  public Cliente criaCliente (Long idUsuario, DTOCriaCliente cliente) {
+    Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
+    if (usuario.isEmpty()) {
+      return null;
+    }
 
-    var clienteSalvo = clienteRepository.save(clientes);
-    System.out.println(clienteSalvo);
+    Endereco endereco = obtemEndereco(cliente.cep());
 
-    return clienteSalvo;
+    Cliente clienteEntidade = new Cliente(cliente.nome(), cliente.telefone(), cliente.email(), endereco);
+
+    clienteEntidade.setUsuario(usuario.get());
+    Cliente salvo = clienteRepository.save(clienteEntidade);
+
+    return clienteEntidade;
   }
 
   public Cliente criaCliente (Cliente cliente) {
@@ -93,8 +100,11 @@ public class ClienteService {
     return cliente2;
   }
 
-  public List<ClienteDTOOutput> listarCliente() {
-    List<Cliente> all = clienteRepository.findAll();
+  public List<ClienteDTOOutput> listarClientes(Long idUsuario) {
+    if (!usuarioRepository.existsById(idUsuario)) {
+      return null;
+    }
+    List<Cliente> all = clienteRepository.findByUsuarioId(idUsuario);
     List<ClienteDTOOutput> clientes = all.stream().map(ClienteDTOOutput::new).toList();
 
     return clientes;

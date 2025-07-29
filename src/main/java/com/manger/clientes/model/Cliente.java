@@ -14,6 +14,7 @@ public class Cliente {
   private String email;
 
   @ManyToOne
+  @JoinColumn(name = "usuario_id")
   private Usuario usuario;
 
   @OneToOne(cascade = CascadeType.ALL)
@@ -69,6 +70,10 @@ public class Cliente {
 
   public void setEndereco(Endereco endereco) {
     this.endereco = endereco;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
 
   @Override

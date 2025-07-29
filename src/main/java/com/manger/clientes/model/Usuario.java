@@ -18,6 +18,13 @@ public class Usuario {
   @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
   private List<Cliente> clientes = new ArrayList<>();
 
+  public Usuario () {}
+
+  public Usuario(String nome, String senha) {
+    this.nome = nome;
+    this.senha = senha;
+  }
+
   //---------- Getters e Setters ------------//
   public Long getId() {
     return id;
