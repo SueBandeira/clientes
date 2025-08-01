@@ -4,6 +4,7 @@ import com.manger.clientes.DTO.DTOCriaUsuario;
 import com.manger.clientes.model.Usuario;
 import com.manger.clientes.repository.UsuarioRepository;
 import com.manger.clientes.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class UsuarioController {
 
   // Criar novo usuário
   @PostMapping
-  public ResponseEntity<Usuario> criarUsuario(@RequestBody DTOCriaUsuario usuario) {
+  public ResponseEntity<Usuario> criarUsuario(@Valid @RequestBody DTOCriaUsuario usuario) {
     Usuario salvo = usuarioService.criaUsuario(usuario);
     return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
   }
@@ -32,7 +33,7 @@ public class UsuarioController {
   // Atualizar usuário por ID
   @PutMapping("/{id}")
   public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long idUsuario,
-                                                  @RequestBody DTOCriaUsuario usuario) {
+                                                  @Valid @RequestBody DTOCriaUsuario usuario) {
     Usuario usuarioAtualizado = usuarioService.atualizaUsuario(idUsuario, usuario);
     if (usuarioAtualizado == null)
       return ResponseEntity.notFound().build();

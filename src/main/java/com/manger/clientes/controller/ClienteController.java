@@ -6,6 +6,8 @@ import com.manger.clientes.model.Cliente;
 import com.manger.clientes.repository.ClienteRepository;
 import com.manger.clientes.repository.UsuarioRepository;
 import com.manger.clientes.service.ClienteService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +29,24 @@ public class ClienteController {
   @Autowired
   private ClienteService clienteService;
 
+  @GetMapping("/filtrar")
+  public ResponseEntity<List<Cliente>> buscarClientesPorFiltros(
+      @PathVariable Long idUsuario,
+      @RequestParam(required = false) String uf,
+      @RequestParam(required = false) String cidade
+    //  @RequestParam(required = false) Integer minHabitantes
+  ) {
+
+    List<Cliente> clientesFiltrados = clienteService.buscarPorFiltros(idUsuario, uf, cidade);
+
+    return ResponseEntity.ok(clientesFiltrados);
+  }
+
+  // region ------- CRUD -------
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<Cliente> criarCliente (@PathVariable Long idUsuario,
-                                               @RequestBody DTOCriaCliente cliente) {
+                                               @Valid @RequestBody DTOCriaCliente cliente) {
     Cliente clienteCriado = clienteService.criaCliente(idUsuario, cliente);
 
     if (clienteCriado == null)
@@ -61,17 +77,26 @@ public class ClienteController {
       return ResponseEntity.ok(clientes);
   }
 
-  @DeleteMapping("/{id}")
+//  //Chamada do
+//  @DeleteMapping("/{idCliente}")
+//  @ResponseStatus(HttpStatus.NO_CONTENT)
+//  public void deletarCliente (@PathVariable Long idCliente) {
+//    clienteService.deletaCliente(idCliente);
+//  }
+
+  @DeleteMapping("/{idCliente}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deletarCliente (@PathVariable Long id) {
-    clienteService.deletaCliente(id);
+  public ResponseEntity<Cliente> deletarCliente (@PathVariable Long idUsuario, @PathVariable Long idCliente) {
+    return ResponseEntity.ok(clienteService.getAndDeleteById(idUsuario, idCliente));
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public DTOCriaCliente atualizarCliente (@PathVariable Long id, @RequestBody DTOCriaCliente cliente) {
+  public DTOCriaCliente atualizarCliente (@PathVariable Long id,@Valid @RequestBody DTOCriaCliente cliente) {
     clienteService.atualizaCliente(id, cliente);
     return cliente;
   }
+
+  // end region
 
 }

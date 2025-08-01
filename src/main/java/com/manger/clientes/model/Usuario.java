@@ -1,6 +1,8 @@
 package com.manger.clientes.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +15,13 @@ public class Usuario {
   private Long id;
 
   private String nome;
+
   private String senha;
 
   @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
   private List<Cliente> clientes = new ArrayList<>();
 
+  //---------- Construtores ------------//
   public Usuario () {}
 
   public Usuario(String nome, String senha) {

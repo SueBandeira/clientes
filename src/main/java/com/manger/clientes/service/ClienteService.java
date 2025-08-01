@@ -74,8 +74,20 @@ public class ClienteService {
     return clienteSalvo;
   }
 
-  public void deletaCliente (Long id) {
-    clienteRepository.deleteById(id);
+//  public void deletaCliente (Long idCliente) {
+//    clienteRepository.deleteById(idCliente);
+//  }
+
+  public Cliente getAndDeleteById (Long idUsuario, Long idCliente) {
+    Optional<Cliente> cliente = clienteRepository.findByIdAndUsuarioId(idCliente, idUsuario);
+
+
+    if (cliente.isPresent()) {
+      clienteRepository.deleteById(idCliente);
+      return cliente.get();
+    } else {
+      return null;
+    }
   }
 
   public Cliente atualizaCliente (Long id, DTOCriaCliente cliente) {
@@ -106,6 +118,12 @@ public class ClienteService {
     }
     List<Cliente> all = clienteRepository.findByUsuarioId(idUsuario);
     List<ClienteDTOOutput> clientes = all.stream().map(ClienteDTOOutput::new).toList();
+
+    return clientes;
+  }
+
+  public List<Cliente> buscarPorFiltros(Long idUsuario, String uf, String cidade) {
+    List<Cliente> clientes = clienteRepository.buscarPorFiltros(idUsuario, uf, cidade);
 
     return clientes;
   }

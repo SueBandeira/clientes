@@ -77,9 +77,9 @@ public class Principal {
         case 5:
           listasClientePorId();
           break;
-        case 6:
-          deletarCliente();
-          break;
+//        case 6:
+//          deletarCliente();
+//          break;
         case 7:
           atualizarCliente();
           break;
@@ -181,7 +181,7 @@ public class Principal {
     var nome = leitura.nextLong();
     leitura.nextLine();
 
-    clienteService.deletaCliente(nome);
+    //clienteService.deletaCliente(nome);
   }
 
 //  private void listasClientesRegistrados() {
