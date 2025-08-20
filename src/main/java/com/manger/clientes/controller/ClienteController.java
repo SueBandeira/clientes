@@ -42,6 +42,10 @@ public class ClienteController {
     return ResponseEntity.ok(clientesFiltrados);
   }
 
+
+
+  //TODO usar um arquivo para selecionar palavras chaves que vai auxiliar na sugestão de pesquisa.
+
   // region ------- CRUD -------
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -97,6 +101,6 @@ public class ClienteController {
     return cliente;
   }
 
-  // end region
+  // endregion
 
 }

@@ -123,6 +123,9 @@ public class ClienteService {
   }
 
   public List<Cliente> buscarPorFiltros(Long idUsuario, String uf, String cidade) {
+    uf = uf.toUpperCase();
+    cidade = cidade.toUpperCase();
+
     List<Cliente> clientes = clienteRepository.buscarPorFiltros(idUsuario, uf, cidade);
 
     return clientes;

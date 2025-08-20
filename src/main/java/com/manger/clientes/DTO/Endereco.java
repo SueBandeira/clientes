@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 @Entity
 public class Endereco {
   @Id
@@ -27,8 +29,8 @@ public class Endereco {
     this.logradouro = dtoEndereco.logradouro();
     this.complemento = dtoEndereco.complemento();
     this.bairro = dtoEndereco.bairro();
-    this.cidade = dtoEndereco.cidade();
-    this.uf = dtoEndereco.uf();
+    this.setCidade(dtoEndereco.cidade());
+    this.setUf(dtoEndereco.uf());
     this.estado = dtoEndereco.estado();
   }
 
@@ -78,7 +80,27 @@ public class Endereco {
   }
 
   public void setCidade(String cidade) {
-    this.cidade = cidade;
+    //Criar uma classe de normalização para chamar no set em vez de criar toda a lógica nele.
+    cidade = cidade.trim();
+    cidade = cidade.replaceAll("\\s{2,}", " ");
+
+    String[] palavras = cidade.split(" ");
+
+    List<String> preposicoes = List.of("do", "dos", "da", "das", "de", "e");
+    String novaCidade = "";
+
+    for (int i = 0; i < palavras.length; i++) {
+      String palavra = palavras[i].toLowerCase();
+
+      if (preposicoes.contains(palavra)) {
+        palavras[i] = palavra;
+      } else {
+        palavras[i] = palavra.substring(0, 1).toUpperCase().concat(palavra.substring(1).toLowerCase());
+      }
+      novaCidade = novaCidade + " " + palavras[i];
+    }
+
+    this.cidade = novaCidade.substring(1);
   }
 
   public String getUf() {
@@ -86,7 +108,7 @@ public class Endereco {
   }
 
   public void setUf(String uf) {
-    this.uf = uf;
+    this.uf = uf.toUpperCase();
   }
 
   public String getEstado() {
