@@ -7,14 +7,13 @@ import com.manger.clientes.repository.ClienteRepository;
 import com.manger.clientes.repository.UsuarioRepository;
 import com.manger.clientes.service.ClienteService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios/{idUsuario}/clientes")
@@ -42,9 +41,14 @@ public class ClienteController {
     return ResponseEntity.ok(clientesFiltrados);
   }
 
+  @GetMapping("/sugestao")
+  public ResponseEntity<List<String>> sugestaoPesquisa (@PathVariable Long idUsuario,
+                                                        @RequestParam String palavra) {
 
+    List<String> sugestoes = clienteService.sugestoes(palavra);
 
-  //TODO usar um arquivo para selecionar palavras chaves que vai auxiliar na sugestão de pesquisa.
+    return ResponseEntity.ok(sugestoes);
+  }
 
   // region ------- CRUD -------
   @PostMapping
