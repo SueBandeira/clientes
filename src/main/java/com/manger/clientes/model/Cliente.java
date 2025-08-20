@@ -2,21 +2,14 @@ package com.manger.clientes.model;
 
 import com.manger.clientes.DTO.Endereco;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.lang.NonNull;
 
 @Entity
 public class Cliente {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   private String nome;
-
   private String telefone;
-
   private String email;
 
   @ManyToOne
